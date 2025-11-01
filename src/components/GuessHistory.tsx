@@ -43,13 +43,13 @@ const GuessHistory: React.FC<GuessHistoryProps> = ({ refreshTrigger }) => {
     if (isCorrect) {
       return (
         <span className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800">
-          ✓ Correct
+          Correct
         </span>
       );
     }
     return (
       <span className="px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-800">
-        ✗ Wrong
+        Wrong
       </span>
     );
   };
