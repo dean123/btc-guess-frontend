@@ -47,10 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setUser(user);
     localStorage.setItem("user", JSON.stringify(user));
-
-    if (data.token) {
-      localStorage.setItem("token", data.access_token);
-    }
+    localStorage.setItem("token", data.access_token);
   };
 
   const register = async (username: string, password: string) => {
@@ -75,10 +72,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
     setUser(user);
     localStorage.setItem("user", JSON.stringify(user));
-
-    if (data.token) {
-      localStorage.setItem("token", data.access_token);
-    }
+    localStorage.setItem("token", data.access_token);
   };
 
   const logout = () => {

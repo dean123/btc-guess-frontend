@@ -5,16 +5,14 @@ import Navbar from "./components/Navbar";
 import Login from "./components/Login";
 import Register from "./components/Register";
 import ProtectedRoute from "./components/ProtectedRoute";
-import logo from "./logo.svg";
+import Guess from "./components/Guess";
 import "./App.css";
 
 function Home() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <h1>Welcome to BTC Guess!</h1>
-        <p>You are now logged in and can access the application.</p>
+        <Guess />
       </header>
     </div>
   );
