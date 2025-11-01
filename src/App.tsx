@@ -1,8 +1,10 @@
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 
-function App() {
+// Example components for different routes
+function Home() {
   return (
     <div className="App">
       <header className="App-header">
@@ -20,6 +22,28 @@ function App() {
         </a>
       </header>
     </div>
+  );
+}
+
+function About() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <h1>About Page</h1>
+        <Link to="/">Go to Home</Link>
+      </header>
+    </div>
+  );
+}
+
+function App() {
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+      </Routes>
+    </Router>
   );
 }
 
