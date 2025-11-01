@@ -5,6 +5,10 @@ import ScoreDisplay from "./ScoreDisplay";
 import { useGuesses } from "../contexts/GuessContext";
 import { useUserScore } from "../hooks/useUserScore";
 
+// Backend needs time to fetch and store the new BTC price
+// We wait this many seconds after the minute mark before fetching
+const BACKEND_PROCESSING_DELAY_SECONDS = 4;
+
 const Guess: React.FC = () => {
   const [btcPrice, setBtcPrice] = useState<BTCPrice | null>(null);
   const [loading, setLoading] = useState(true);
@@ -42,7 +46,8 @@ const Guess: React.FC = () => {
     const updateCountdown = () => {
       // Count down from the price snapshot timestamp to the next minute
       const priceTime = new Date(btcPrice.timestamp).getTime();
-      const nextPriceTime = priceTime + 60000;
+      const nextPriceTime =
+        priceTime + 60000 + BACKEND_PROCESSING_DELAY_SECONDS * 1000;
       const now = Date.now();
       const remaining = Math.max(0, Math.ceil((nextPriceTime - now) / 1000));
       setCountdown(remaining);
