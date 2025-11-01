@@ -1,25 +1,20 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "./contexts/AuthContext";
+import Navbar from "./components/Navbar";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import ProtectedRoute from "./components/ProtectedRoute";
+import logo from "./logo.svg";
+import "./App.css";
 
-// Example components for different routes
 function Home() {
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
+        <h1>Welcome to BTC Guess!</h1>
+        <p>You are now logged in and can access the application.</p>
       </header>
     </div>
   );
@@ -29,8 +24,11 @@ function About() {
   return (
     <div className="App">
       <header className="App-header">
-        <h1>About Page</h1>
-        <Link to="/">Go to Home</Link>
+        <h1>About BTC Guess</h1>
+        <p>
+          This is a Bitcoin price guessing game where you can predict future
+          Bitcoin prices and compete with other users.
+        </p>
       </header>
     </div>
   );
@@ -38,12 +36,24 @@ function About() {
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-      </Routes>
-    </Router>
+    <AuthProvider>
+      <Router>
+        <Navbar />
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route
+            path="/"
+            element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/about" element={<About />} />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
 }
 
