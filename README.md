@@ -26,7 +26,7 @@ Before you begin, ensure you have the following installed:
 
 - **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
 - **npm** (comes with Node.js)
-- **Backend API** - The BTC Guess backend must be running (see backend repository)
+- **Backend API** - The [BTC Guess backend](https://github.com/dean123/btc-guess-backend) must be running
 
 ## 🚀 Getting Started
 
