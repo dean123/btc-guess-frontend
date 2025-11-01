@@ -15,7 +15,6 @@ const GuessHistory: React.FC<GuessHistoryProps> = ({ refreshTrigger }) => {
       setLoading(true);
       setError(null);
       const data = await api.getUserGuesses();
-      // Sort by most recent first
       setGuesses(
         data.sort(
           (a, b) =>
@@ -84,11 +83,7 @@ const GuessHistory: React.FC<GuessHistoryProps> = ({ refreshTrigger }) => {
     }
 
     if (guesses.length === 0) {
-      return (
-        <div className="text-center text-gray-400">
-          No guesses yet. Make your first guess above!
-        </div>
-      );
+      return <></>;
     }
 
     return (
@@ -143,14 +138,7 @@ const GuessHistory: React.FC<GuessHistoryProps> = ({ refreshTrigger }) => {
     );
   };
 
-  return (
-    <div className="max-w-4xl mx-auto p-5">
-      <h3 className="text-2xl font-bold mb-4 text-center">
-        Your Guess History
-      </h3>
-      {renderContent()}
-    </div>
-  );
+  return <div className="max-w-4xl mx-auto p-5">{renderContent()}</div>;
 };
 
 export default GuessHistory;

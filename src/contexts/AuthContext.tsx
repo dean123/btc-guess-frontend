@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from "react";
+import React, { createContext, useContext, useState } from "react";
 import { User, AuthContextType } from "../types/auth";
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -14,16 +14,10 @@ export const useAuth = () => {
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
-  const [user, setUser] = useState<User | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
+  const [user, setUser] = useState<User | null>(() => {
     const savedUser = localStorage.getItem("user");
-    if (savedUser) {
-      setUser(JSON.parse(savedUser));
-    }
-    setIsLoading(false);
-  }, []);
+    return savedUser ? JSON.parse(savedUser) : null;
+  });
 
   const login = async (username: string, password: string) => {
     const response = await fetch("http://localhost:3000/auth/login", {
@@ -86,7 +80,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
     register,
     logout,
     isAuthenticated: !!user,
-    isLoading,
+    isLoading: false,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

@@ -18,7 +18,7 @@ const Login: React.FC = () => {
     try {
       await login(username, password);
       navigate("/");
-    } catch (err) {
+    } catch {
       setError("Invalid username or password");
     } finally {
       setIsLoading(false);
@@ -80,7 +80,7 @@ const Login: React.FC = () => {
           </button>
         </form>
         <p className="mt-4 text-center text-gray-600 text-sm">
-          Don't have an account?{" "}
+          Dont have an account?{" "}
           <Link
             to="/register"
             className="text-cyan-400 no-underline font-medium hover:underline"

@@ -30,7 +30,7 @@ const Register: React.FC = () => {
     try {
       await register(username, password);
       navigate("/");
-    } catch (err) {
+    } catch {
       setError("Registration failed. Please try again.");
     } finally {
       setIsLoading(false);

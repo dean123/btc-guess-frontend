@@ -51,7 +51,6 @@ export const api = {
     priceSnapshotId: string
   ): Promise<GuessResponse> => {
     const token = localStorage.getItem("token");
-    console.log(token);
     const response = await fetch(`${API_BASE_URL}/guesses`, {
       method: "POST",
       headers: {
