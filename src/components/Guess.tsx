@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { api, BTCPrice } from "../services/api";
+import GuessHistory from "./GuessHistory";
 
 const Guess: React.FC = () => {
   const [btcPrice, setBtcPrice] = useState<BTCPrice | null>(null);
@@ -7,6 +8,7 @@ const Guess: React.FC = () => {
   const [guessing, setGuessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState<number>(0);
+  const [historyRefresh, setHistoryRefresh] = useState<number>(0);
 
   const fetchPrice = async () => {
     try {
@@ -46,6 +48,8 @@ const Guess: React.FC = () => {
   useEffect(() => {
     if (countdown <= 0) {
       fetchPrice();
+
+      setHistoryRefresh((prev) => prev + 1);
     }
   }, [countdown]);
 
@@ -58,10 +62,9 @@ const Guess: React.FC = () => {
       setGuessing(true);
       setError(null);
 
-      const response = await api.submitGuess(direction, btcPrice.id);
-      console.log(response);
+      await api.submitGuess(direction, btcPrice.id);
 
-      // await fetchPrice();
+      setHistoryRefresh((prev) => prev + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit guess");
     } finally {
@@ -80,65 +83,71 @@ const Guess: React.FC = () => {
   // leaving 5 seconds of buffer in the beginning and end so that the UI changes are less confusing
   const disableActions = guessing || loading || countdown < 5 || countdown > 55;
   return (
-    <div className="max-w-2xl mx-auto p-5 text-center">
-      {error && (
-        <div className="bg-red-500 text-white p-3 rounded-lg mb-5">{error}</div>
-      )}
-
-      {btcPrice && (
-        <div className="bg-gray-800 p-8 rounded-xl mb-5">
-          <h3 className="text-cyan-400 text-xl mb-3">Current BTC Price</h3>
-          <div className="text-5xl font-bold text-white mb-3">
-            $
-            {btcPrice.price.toLocaleString("en-US", {
-              minimumFractionDigits: 2,
-              maximumFractionDigits: 2,
-            })}
+    <>
+      <div className="max-w-2xl mx-auto p-5 text-center">
+        {error && (
+          <div className="bg-red-500 text-white p-3 rounded-lg mb-5">
+            {error}
           </div>
-          <div className="text-xs text-gray-400 mb-4">
-            Last updated: {new Date(btcPrice.timestamp).toLocaleTimeString()}
+        )}
+
+        {btcPrice && (
+          <div className="bg-gray-800 p-8 rounded-xl mb-5">
+            <h3 className="text-cyan-400 text-xl mb-3">Current BTC Price</h3>
+            <div className="text-5xl font-bold text-white mb-3">
+              $
+              {btcPrice.price.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}
+            </div>
+            <div className="text-xs text-gray-400 mb-4">
+              Last updated: {new Date(btcPrice.timestamp).toLocaleTimeString()}
+            </div>
+
+            <div
+              className={`text-2xl font-bold p-3 rounded-lg ${
+                countdown <= 10
+                  ? "text-red-400 bg-red-400/10"
+                  : "text-cyan-400 bg-cyan-400/10"
+              }`}
+            >
+              ⏱️ Next price in: {countdown}s
+            </div>
           </div>
+        )}
 
-          <div
-            className={`text-2xl font-bold p-3 rounded-lg ${
-              countdown <= 10
-                ? "text-red-400 bg-red-400/10"
-                : "text-cyan-400 bg-cyan-400/10"
-            }`}
-          >
-            ⏱️ Next price in: {countdown}s
+        <div className="mb-5">
+          <div className="flex gap-5 justify-center">
+            <button
+              onClick={() => handleGuess("UP")}
+              disabled={disableActions}
+              className={`px-8 py-4 text-lg font-bold bg-green-600 text-white border-none rounded-lg transition-all duration-300 ${
+                disableActions
+                  ? "opacity-60 cursor-not-allowed"
+                  : "hover:bg-green-700 cursor-pointer"
+              }`}
+            >
+              📈 UP
+            </button>
+
+            <button
+              onClick={() => handleGuess("DOWN")}
+              disabled={disableActions}
+              className={`px-8 py-4 text-lg font-bold bg-red-600 text-white border-none rounded-lg transition-all duration-300 ${
+                disableActions
+                  ? "opacity-60 cursor-not-allowed"
+                  : "hover:bg-red-700 cursor-pointer"
+              }`}
+            >
+              📉 DOWN
+            </button>
           </div>
-        </div>
-      )}
-
-      <div className="mb-5">
-        <div className="flex gap-5 justify-center">
-          <button
-            onClick={() => handleGuess("UP")}
-            disabled={disableActions}
-            className={`px-8 py-4 text-lg font-bold bg-green-600 text-white border-none rounded-lg transition-all duration-300 ${
-              disableActions
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:bg-green-700 cursor-pointer"
-            }`}
-          >
-            📈 UP
-          </button>
-
-          <button
-            onClick={() => handleGuess("DOWN")}
-            disabled={disableActions}
-            className={`px-8 py-4 text-lg font-bold bg-red-600 text-white border-none rounded-lg transition-all duration-300 ${
-              disableActions
-                ? "opacity-60 cursor-not-allowed"
-                : "hover:bg-red-700 cursor-pointer"
-            }`}
-          >
-            📉 DOWN
-          </button>
         </div>
       </div>
-    </div>
+
+      <GuessHistory refreshTrigger={historyRefresh} />
+    </>
   );
 };
 

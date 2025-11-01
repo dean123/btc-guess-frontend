@@ -13,6 +13,15 @@ export interface GuessResponse {
   correctPrice?: number;
 }
 
+export interface Guess {
+  id: string;
+  direction: "UP" | "DOWN";
+  isCorrect: boolean | null;
+  priceSnapshotId: string;
+  userId: string;
+  createdAt: string;
+}
+
 export const api = {
   getBTCPrice: async (): Promise<BTCPrice> => {
     const token = localStorage.getItem("token");
@@ -48,6 +57,23 @@ export const api = {
 
     if (!response.ok) {
       throw new Error("Failed to submit guess");
+    }
+
+    return response.json();
+  },
+
+  getUserGuesses: async (): Promise<Guess[]> => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/guesses/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch guesses");
     }
 
     return response.json();
