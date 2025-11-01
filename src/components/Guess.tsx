@@ -147,11 +147,11 @@ const Guess: React.FC = () => {
         )}
 
         <div className="mb-5">
-          <div className="flex gap-5 justify-center">
+          <div className="flex gap-5 justify-center flex-wrap">
             <button
               onClick={() => handleGuess("UP")}
               disabled={disableActions}
-              className={`px-8 py-4 text-lg font-bold bg-green-600 text-white border-none rounded-lg transition-all duration-300 ${
+              className={`px-8 py-4 text-lg font-bold bg-green-600 text-white border-none rounded-lg transition-all duration-300 min-w-3xs ${
                 disableActions
                   ? "opacity-60 cursor-not-allowed"
                   : "hover:bg-green-700 cursor-pointer"
@@ -163,7 +163,7 @@ const Guess: React.FC = () => {
             <button
               onClick={() => handleGuess("DOWN")}
               disabled={disableActions}
-              className={`px-8 py-4 text-lg font-bold bg-red-600 text-white border-none rounded-lg transition-all duration-300 ${
+              className={`px-8 py-4 text-lg font-bold bg-red-600 text-white border-none rounded-lg transition-all duration-300 min-w-3xs ${
                 disableActions
                   ? "opacity-60 cursor-not-allowed"
                   : "hover:bg-red-700 cursor-pointer"
