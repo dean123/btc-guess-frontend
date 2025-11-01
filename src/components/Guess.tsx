@@ -144,7 +144,7 @@ const Guess: React.FC = () => {
                   : "hover:bg-green-700 cursor-pointer"
               }`}
             >
-              📈 UP
+              UP
             </button>
 
             <button
@@ -156,7 +156,7 @@ const Guess: React.FC = () => {
                   : "hover:bg-red-700 cursor-pointer"
               }`}
             >
-              📉 DOWN
+              DOWN
             </button>
           </div>
         </div>

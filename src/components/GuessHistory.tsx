@@ -59,13 +59,13 @@ const GuessHistory: React.FC<GuessHistoryProps> = ({ refreshTrigger }) => {
     if (direction === "UP") {
       return (
         <span className="px-3 py-1 rounded text-xs font-semibold bg-green-600 text-white">
-          📈 UP
+          UP
         </span>
       );
     }
     return (
       <span className="px-3 py-1 rounded text-xs font-semibold bg-red-600 text-white">
-        📉 DOWN
+        DOWN
       </span>
     );
   };
