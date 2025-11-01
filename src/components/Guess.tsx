@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import { api, BTCPrice } from "../services/api";
 import GuessHistory from "./GuessHistory";
 import ScoreDisplay from "./ScoreDisplay";
+import { useGuesses } from "../contexts/GuessContext";
+import { useUserScore } from "../hooks/useUserScore";
 
 const Guess: React.FC = () => {
   const [btcPrice, setBtcPrice] = useState<BTCPrice | null>(null);
@@ -9,9 +11,11 @@ const Guess: React.FC = () => {
   const [guessing, setGuessing] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState<number>(0);
-  const [historyRefresh, setHistoryRefresh] = useState<number>(0);
   const [hasGuessedForCurrentSnapshot, setHasGuessedForCurrentSnapshot] =
     useState(false);
+
+  const { refreshGuesses } = useGuesses();
+  const { refreshScore } = useUserScore();
 
   const fetchPrice = async () => {
     try {
@@ -53,10 +57,11 @@ const Guess: React.FC = () => {
   useEffect(() => {
     if (countdown <= 0) {
       fetchPrice();
-
-      setHistoryRefresh((prev) => prev + 1);
+      // Refresh guesses and score when new price comes in
+      refreshGuesses();
+      refreshScore();
     }
-  }, [countdown]);
+  }, [countdown, refreshGuesses, refreshScore]);
 
   const handleGuess = async (direction: "UP" | "DOWN") => {
     if (!btcPrice || hasGuessedForCurrentSnapshot) {
@@ -71,7 +76,10 @@ const Guess: React.FC = () => {
 
       // Mark that a guess has been placed for this snapshot
       setHasGuessedForCurrentSnapshot(true);
-      setHistoryRefresh((prev) => prev + 1);
+
+      // Refresh the guess list and score after submitting
+      refreshGuesses();
+      refreshScore();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit guess");
     } finally {
@@ -98,7 +106,7 @@ const Guess: React.FC = () => {
     <>
       <div className="max-w-2xl mx-auto p-5 text-center">
         <div className="mb-6 flex justify-center">
-          <ScoreDisplay refreshTrigger={historyRefresh} />
+          <ScoreDisplay />
         </div>
 
         {error && (
@@ -162,7 +170,7 @@ const Guess: React.FC = () => {
         </div>
       </div>
 
-      <GuessHistory refreshTrigger={historyRefresh} />
+      <GuessHistory />
     </>
   );
 };

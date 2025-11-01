@@ -1,36 +1,12 @@
-import React, { useState, useEffect } from "react";
-import { api, Guess } from "../services/api";
+import React, { useEffect } from "react";
+import { useGuesses } from "../contexts/GuessContext";
 
-interface GuessHistoryProps {
-  refreshTrigger?: number;
-}
-
-const GuessHistory: React.FC<GuessHistoryProps> = ({ refreshTrigger }) => {
-  const [guesses, setGuesses] = useState<Guess[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  const fetchGuesses = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await api.getUserGuesses();
-      setGuesses(
-        data.sort(
-          (a, b) =>
-            new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        )
-      );
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to fetch guesses");
-    } finally {
-      setLoading(false);
-    }
-  };
+const GuessHistory: React.FC = () => {
+  const { guesses, loading, error, refreshGuesses } = useGuesses();
 
   useEffect(() => {
-    fetchGuesses();
-  }, [refreshTrigger]);
+    refreshGuesses();
+  }, [refreshGuesses]);
 
   const getStatusBadge = (isCorrect: boolean | null) => {
     if (isCorrect === null) {
