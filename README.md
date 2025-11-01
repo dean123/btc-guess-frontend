@@ -1,46 +1,150 @@
-# Getting Started with Create React App
+# BTC Guess - Frontend
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A React-based single-page application (SPA) where users can guess whether Bitcoin's price will go UP or DOWN in the next minute. Track your score, view your guess history, and compete to see how well you can predict the market!
 
-## Available Scripts
+## 🎮 Features
 
-In the project directory, you can run:
+- **Real-time BTC Price** - Live Bitcoin price updates
+- **Guess UP or DOWN** - Predict if the price will increase or decrease
+- **User Authentication** - Register and login to track your performance
+- **Guess History** - View all your past guesses and results
+- **Score Tracking** - See your cumulative score based on correct predictions
+- **Responsive Design** - Works on desktop and mobile devices
 
-### `npm start`
+## 🏗️ Tech Stack
 
-Runs the app in the development mode.\
-Open [http://localhost:3001](http://localhost:3001) to view it in the browser.
+- **React 19** - UI library
+- **TypeScript** - Type safety
+- **Vite** - Build tool and dev server
+- **Tailwind CSS** - Styling
+- **React Router** - Client-side routing
+- **ESLint + Prettier** - Code quality and formatting
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## 📋 Prerequisites
 
-### `npm test`
+Before you begin, ensure you have the following installed:
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- **Node.js** (v18 or higher) - [Download here](https://nodejs.org/)
+- **npm** (comes with Node.js)
+- **Backend API** - The BTC Guess backend must be running (see backend repository)
 
-### `npm run build`
+## 🚀 Getting Started
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### 1. Clone the Repository
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```bash
+git clone <repository-url>
+cd btc-guess-frontend
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### 2. Install Dependencies
 
-### `npm run eject`
+```bash
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+### 3. Configure Environment Variables
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Create a `.env` file in the root directory:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+cp .env.example .env
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Edit `.env` and set your backend API URL:
 
-## Learn More
+```env
+VITE_API_BASE_URL=http://localhost:3000
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+**Note:** If your backend is running on a different port or host, update the URL accordingly.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### 4. Start the Development Server
+
+```bash
+npm run dev
+```
+
+The app will be available at [http://localhost:3001](http://localhost:3001)
+
+Your browser should automatically open. If not, manually navigate to the URL above.
+
+## 🛠️ Development
+
+### Project Structure
+
+```
+src/
+├── components/          # React components
+│   ├── BTCPriceDisplay.tsx   # Shows current BTC price
+│   ├── GuessButtons.tsx      # UP/DOWN guess buttons
+│   ├── GuessHistory.tsx      # User's guess history
+│   ├── Login.tsx             # Login form
+│   ├── Register.tsx          # Registration form
+│   └── UserScore.tsx         # Displays user score
+├── contexts/           # React context providers
+│   └── AuthContext.tsx       # Authentication context
+├── services/           # API services
+│   └── api.ts               # API client functions
+├── types/              # TypeScript type definitions
+│   └── auth.ts              # Auth-related types
+├── App.tsx             # Main app component
+├── index.tsx           # App entry point
+└── vite-env.d.ts      # Vite environment types
+```
+
+### Available Scripts
+
+#### `npm run dev`
+
+Starts the development server with hot reload at [http://localhost:3001](http://localhost:3001)
+
+#### `npm run build`
+
+Creates an optimized production build in the `build/` directory
+
+#### `npm run preview`
+
+Preview the production build locally
+
+#### `npm run lint`
+
+Run ESLint to check for code issues
+
+#### `npm run lint:fix`
+
+Automatically fix ESLint issues where possible
+
+#### `npm run format`
+
+Format code using Prettier
+
+#### `npm run format:check`
+
+Check if code is properly formatted
+
+### Code Quality
+
+This project uses:
+
+- **ESLint** - Catches bugs and enforces code standards
+- **Prettier** - Ensures consistent code formatting
+- **TypeScript** - Provides type safety
+
+```bash
+# Check everything
+npm run lint
+npm run format:check
+
+# Fix issues automatically
+npm run lint:fix
+npm run format
+```
+
+## 🔧 Configuration
+
+### Environment Variables
+
+The app uses Vite's environment variable system. Variables must be prefixed with `VITE_`:
+
+- `VITE_API_BASE_URL` - Backend API URL (required)
