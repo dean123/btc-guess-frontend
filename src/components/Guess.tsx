@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { api, BTCPrice } from "../services/api";
 import GuessHistory from "./GuessHistory";
+import ScoreDisplay from "./ScoreDisplay";
 
 const Guess: React.FC = () => {
   const [btcPrice, setBtcPrice] = useState<BTCPrice | null>(null);
@@ -85,6 +86,10 @@ const Guess: React.FC = () => {
   return (
     <>
       <div className="max-w-2xl mx-auto p-5 text-center">
+        <div className="mb-6 flex justify-center">
+          <ScoreDisplay refreshTrigger={historyRefresh} />
+        </div>
+
         {error && (
           <div className="bg-red-500 text-white p-3 rounded-lg mb-5">
             {error}

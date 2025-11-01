@@ -6,6 +6,12 @@ export interface BTCPrice {
   timestamp: string;
 }
 
+export interface UserProfile {
+  id: string;
+  username: string;
+  score: number;
+}
+
 export interface GuessResponse {
   success: boolean;
   message: string;
@@ -74,6 +80,23 @@ export const api = {
 
     if (!response.ok) {
       throw new Error("Failed to fetch guesses");
+    }
+
+    return response.json();
+  },
+
+  getCurrentUser: async (): Promise<UserProfile> => {
+    const token = localStorage.getItem("token");
+    const response = await fetch(`${API_BASE_URL}/auth/me`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        ...(token && { Authorization: `Bearer ${token}` }),
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to fetch user profile");
     }
 
     return response.json();
