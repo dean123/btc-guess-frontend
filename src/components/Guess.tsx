@@ -10,6 +10,8 @@ const Guess: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [countdown, setCountdown] = useState<number>(0);
   const [historyRefresh, setHistoryRefresh] = useState<number>(0);
+  const [hasGuessedForCurrentSnapshot, setHasGuessedForCurrentSnapshot] =
+    useState(false);
 
   const fetchPrice = async () => {
     try {
@@ -17,6 +19,8 @@ const Guess: React.FC = () => {
       setError(null);
       const price = await api.getBTCPrice();
       setBtcPrice(price);
+      // Reset the guess flag when a new price snapshot is fetched
+      setHasGuessedForCurrentSnapshot(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to fetch price");
     } finally {
@@ -55,7 +59,7 @@ const Guess: React.FC = () => {
   }, [countdown]);
 
   const handleGuess = async (direction: "UP" | "DOWN") => {
-    if (!btcPrice) {
+    if (!btcPrice || hasGuessedForCurrentSnapshot) {
       return;
     }
 
@@ -65,6 +69,8 @@ const Guess: React.FC = () => {
 
       await api.submitGuess(direction, btcPrice.id);
 
+      // Mark that a guess has been placed for this snapshot
+      setHasGuessedForCurrentSnapshot(true);
       setHistoryRefresh((prev) => prev + 1);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to submit guess");
@@ -82,7 +88,12 @@ const Guess: React.FC = () => {
   }
 
   // leaving 5 seconds of buffer in the beginning and end so that the UI changes are less confusing
-  const disableActions = guessing || loading || countdown < 5 || countdown > 55;
+  const disableActions =
+    guessing ||
+    loading ||
+    countdown < 5 ||
+    countdown > 55 ||
+    hasGuessedForCurrentSnapshot;
   return (
     <>
       <div className="max-w-2xl mx-auto p-5 text-center">
